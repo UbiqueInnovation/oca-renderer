@@ -1,0 +1,43 @@
+[package]
+name = "oca-render"
+version = "0.1.0"
+edition = "2021"
+[[bin]]
+name = "render_oca"
+path = "src/main.rs"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+base64 = "0.22.1"
+blake3 = "1.5.4"
+chrono = {version = "0.4.38", default-features = false}
+getrandom = { version = "0.2.15", features = ["js"] }
+mustache = {version = "0.9.0", optional = true}
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
+ureq = { version = "2.10.1", features = ["json"], optional = true}
+wasm-minimal-protocol = { git = "https://github.com/astrale-sharp/wasm-minimal-protocol/", version = "0.1.0" , optional = true}
+zip = { version = "2.2.0", default-features = false, features = ["deflate"] }
+
+typst = {version = "0.11.1", optional = true}
+typst-assets = { version = "0.11.0", features = ["fonts"], optional = true}
+typst-render = {version = "0.11.1", optional = true}
+ecow = {version = "0.2.2", optional = true}
+dirs = {version = "5.0.1", optional = true}
+comemo = {version = "0.4.0", optional = true}
+fontdb = {version = "0.16.2", optional = true}
+thiserror = {version = "1.0.58", optional = true}
+flate2 = {version = "1.0.28", optional = true }
+tar = {version = "0.4.40", optional = true }
+jsonpath_lib = "0.3.0"
+
+[features]
+default = ["typst-renderer", "ureq"]
+typst-plugin = ["wasm-minimal-protocol", "mustache"]
+typst-build = ["typst", "typst-assets", "typst-render", "ecow", "dirs", "comemo", "fontdb", "thiserror", "flate2", "tar"]
+typst-renderer = ["typst-build", "chrono/now"]
+
+[profile.dev.package."*"]
+debug-assertions = false
+overflow-checks = false
+opt-level = 3
